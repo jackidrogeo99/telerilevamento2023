@@ -51,13 +51,68 @@ plot(l2011[[3]], col=clr)
 clN1<-colorRampPalette(c("darkorchid4", "darkorchid2", "darkorchid"))(100)
 plot(l2011[[4]],col=clN1)
 
+# Day #3
 
+# Plot of l2011 in the NIR channel (NIR band)
+clnir <- colorRampPalette(c("red", "orange", "yellow")) (100)
+plot(l2011$B4_sre, col=clnir)
+# or:
+plot(l2011[[4]])
 
+# Landsat ETM+
+# b1 = blu
+# b2 = verde
+# b3 = rosso
+# b4 = infrarosso vicino NIR
 
+# plot RGB layers
+plotRGB(l2011, r=3, g=2, b=1, stretch="lin") #stretch riscala i val per visualizzare ancora meglio l'immagine satellitare, lin secondo una rel lineare
+plotRGB(l2011, r=3, g=4, b=2, stretch="lin")
+plotRGB(l2011, r=3, g=2, b=4, stretch="lin")
 
+plotRGB(l2011, r=3, g=4, b=2, stretch="hist") #hist riscala i val in modo che aumenti vertiginosam all'inizio mentre alla fine l'aum è molto più lim, per cui il 
+  #contrasto è molto più importante
 
+# Exercise: build a multiframe with visible RGB
+# (linear stretch) on top of false colours
+# (histogram stretch)
+par(mfrow=c(2,1)) #mf=multiframe,tipo subplot in python
+plotRGB(l2011, r=3, g=2, b=1, stretch="lin")
+plotRGB(l2011, r=3, g=4, b=2, stretch="hist")
 
+#Exercise: plot the NIR band
+plot(l2011[[4]])
+plotRGB(l2011, r=3, g=2, b=1, stretch="lin")
+plotRGB(l2011, r=4, g=3, b=2, stretch="lin") #NIR
+plotRGB(l2011, r=3, g=4, b=2, stretch="lin")
+plotRGB(l2011, r=3, g=2, b=4, stretch="lin")
 
+# Exercise: upload the image from 1988
+l1988 <- brick("p224r63_1988_masked.grd")
+l1988
+
+par(mfrow=c(2,1))
+plotRGB(l1988, r=4, g=3, b=2, stretch="lin")
+plotRGB(l2011, r=4, g=3, b=2, stretch="lin")
+
+#Exercise: plot in RGB space (natural colours)
+plotRGB(l1988, r=3, g=2, b=1, stretch="lin")
+plotRGB(l1988, r=4, g=3, b=2, stretch="lin") #plot(l1988, 4,3,2, stretch="lin")
+
+#Multiframe
+par(mfrow=c(2,1)) #Apre un nuovo plot grafico con 2 spazi per poi mettere le immagini successivam
+plotRGB(l1988, 4,3,2, stretch="lin")
+plotRGB(l2011, 4,3,2, stretch="lin")
+dev.off()
+
+plotRGB(l2011, 4,3,2, stretch="hist")
+
+#Exercise
+par(mfrow=c(2,2)) 
+plotRGB(l1988, 4,3,2, stretch="lin")
+plotRGB(l2011, 4,3,2, stretch="lin")
+plotRGB(l1988, 4,3,2, stretch="hist")
+plotRGB(l2011, 4,3,2, stretch="hist")
 
 
 
