@@ -1,0 +1,39 @@
+#Calculating spectral indices
+library(raster)
+
+setwd("C:/Telerilevamento Geoecologico/Lab/") #Seleziona la cartella dei file
+
+#Exercise: import defor1_.png
+l1992<-brick("defor1_.png")
+
+#Exercise: plot the image via plotRGB
+plotRGB(l1992, r=1, g=2, b=3, stretch="lin")
+
+#What is NIR? 
+# NIR=1, RED=2, GREEN=3
+# Alla NASA hanno fatto un grafico con r=4, g=3, b=2 --> export: 1,2,3
+# Nell'immagine, l'H2O è azzurra, ma dovrebbe essere nera, questo perchè ci sono 
+  #solidi disciolti
+
+#Exercise: calculate DVI for 1992
+DVI1992=l1992[[1]]-l1992[[2]]
+
+cl<-colorRampPalette(c("darkblue", "yellow", "red", "black"))(100)
+
+#La legenda dei grafici va da 0 a 255: ammettiamo di avere un solo slot d'informaz che può essere 0 o 1 --> 1 solo bit
+  # dà una sola info, mentre se ne ho 2, i val possibili sono 2^2.
+  # Con 3 bit i val possibili saranno 2^3 ecc..., per cui la relaz è 2^n --> per le immagini, n=8 --> 2^8=255 + lo 
+  # zero, e quindi 256
+  # DVI va -255 a +255
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
