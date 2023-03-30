@@ -1,0 +1,19 @@
+# R code for importing and analysing several images
+library(raster)
+setwd("C:/Telerilevamento Geoecologico/Lab/Greenland/")
+
+lst_2000<-raster("lst_2000.tif")
+plot(lst_2000)
+
+#Exercise: import all the data
+lst_2005<-raster("lst_2005.tif")
+lst_2010<-raster("lst_2010.tif")
+lst_2015<-raster("lst_2015.tif")
+
+ls() # Fa la lista di tutti gli oggetti caricati
+lapply() # Applica la f raster alla lista di oggetti
+
+# list f files
+rlist<-list.files(pattern="lst") #Fa la lista dei file dentro la cartella
+import <-lapply(rlist, raster)
+import
