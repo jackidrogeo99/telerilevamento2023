@@ -1,19 +1,38 @@
 # R code for importing and analysing several images
 library(raster)
-setwd("C:/Telerilevamento Geoecologico/Lab/Greenland/")
 
-lst_2000<-raster("lst_2000.tif")
-plot(lst_2000)
+setwd("C:/Telerilevamento_Geoecologico/Lab/Greenland")
+lst_2000 <- raster("lst_2000.tif")
 
-#Exercise: import all the data
-lst_2005<-raster("lst_2005.tif")
-lst_2010<-raster("lst_2010.tif")
-lst_2015<-raster("lst_2015.tif")
+#lst_2000<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2000.tif")
+#lst_2005<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2005.tif")
+#lst_2010<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2010.tif")
+#lst_2015<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2015.tif")
 
-ls() # Fa la lista di tutti gli oggetti caricati
-lapply() # Applica la f raster alla lista di oggetti
+#ls() # Fa la lista di tutti gli oggetti caricati
+#lapply() # Applica la f raster alla lista di oggetti
 
 # list f files
 rlist<-list.files(pattern="lst") #Fa la lista dei file dentro la cartella
 import <-lapply(rlist, raster)
 import
+
+TGr<-stack(import) 
+TGr
+plotRGB(TGr, r=1, g=2, b=3, stretch="lin") #Le zone nere indicano ghiaccio cost nel corso degli anni
+plotRGB(TGr, r=2, g=3, b=1, stretch="lin")
+
+# Difference 2005-2000
+dift<-TGr[[2]]-TGr[[1]]
+plot(dift) #Val alti indicano una maggiore differenza di T
+
+cl<-colorRampPalette(c("blue", "light blue", "pink", "red"))(100)
+plot(TGr, col=cl)
+
+
+
+
+
+
+
+
