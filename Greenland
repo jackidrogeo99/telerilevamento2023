@@ -4,6 +4,18 @@ library(raster)
 setwd("C:/Telerilevamento_Geoecologico/Lab/Greenland")
 lst_2000 <- raster("lst_2000.tif")
 
+#Exercise: import all the data
+lst_2005<-raster("lst_2005.tif")
+lst_2010<-raster("lst_2010.tif")
+lst_2015<-raster("lst_2015.tif")
+
+# par
+par(mfrow=c(2,2))
+plot(lst_2000)
+plot(lst_2005)
+plot(lst_2010)
+plot(lst_2015)
+
 #lst_2000<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2000.tif")
 #lst_2005<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2005.tif")
 #lst_2010<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2010.tif")
@@ -19,7 +31,7 @@ import
 
 TGr<-stack(import) 
 TGr
-plotRGB(TGr, r=1, g=2, b=3, stretch="lin") #Le zone nere indicano ghiaccio cost nel corso degli anni
+plotRGB(TGr, r=1, g=2, b=3, stretch="lin") #2000-2005: Le zone nere indicano ghiaccio cost nel corso degli anni
 plotRGB(TGr, r=2, g=3, b=1, stretch="lin")
 
 # Difference 2005-2000
