@@ -4,7 +4,7 @@ library(raster)
 setwd("C:/Telerilevamento_Geoecologico/Lab/Greenland")
 lst_2000 <- raster("lst_2000.tif")
 
-#Exercise: import all the data
+# Exercise: import all the data
 lst_2005<-raster("lst_2005.tif")
 lst_2010<-raster("lst_2010.tif")
 lst_2015<-raster("lst_2015.tif")
@@ -16,13 +16,13 @@ plot(lst_2005)
 plot(lst_2010)
 plot(lst_2015)
 
-#lst_2000<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2000.tif")
-#lst_2005<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2005.tif")
-#lst_2010<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2010.tif")
-#lst_2015<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2015.tif")
+# lst_2000<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2000.tif")
+# lst_2005<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2005.tif")
+# lst_2010<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2010.tif")
+# lst_2015<-rast("C:/Telerilevamento Geoecologico/Lab/Greenland/lst_2015.tif")
 
-#ls() # Fa la lista di tutti gli oggetti caricati
-#lapply() # Applica la f raster alla lista di oggetti
+# ls() # Fa la lista di tutti gli oggetti caricati
+# lapply() # Applica la f raster alla lista di oggetti
 
 # list f files
 rlist<-list.files(pattern="lst") #Fa la lista dei file dentro la cartella
@@ -40,6 +40,50 @@ plot(dift) #Val alti indicano una maggiore differenza di T
 
 cl<-colorRampPalette(c("blue", "light blue", "pink", "red"))(100)
 plot(TGr, col=cl)
+
+# Exercise 2: European NO2
+setwd("C:/Telerilevamento_Geoecologico/Lab/EN")
+library(raster)
+
+# Importing the first file from an external folder: le f sono brick() se ci sono 
+  # più strati, raster() se c'è soltanto un liv
+en_first<-raster("EN_0001.png")
+en_first
+cl<-colorRampPalette(c("red", "orange", "yellow"))(100)
+plot(en_first, col=cl)
+
+# Nella cartella, però, ci sono 13 file e vogliamo importarli tutti assieme -->
+  # --> list.files() con pattern "EN" e poi lapply()
+rlist<-list.files(pattern="EN") 
+rlist
+import<-lapply(rlist, raster) 
+import
+EN<-stack(import)
+EN
+plot(EN, col=cl)
+
+# Controlliamo che il 1° dei 13 file sia en_first --> en_first=EN[[1]]
+par(mfrow=c(1,2))
+plot(en_first, col=cl)
+plot(EN[[1]], col=cl)
+dev.off()
+# Check 2
+difcheck<-en_first-EN[[1]] # 0 se le immagini sono =
+difcheck
+plot(difcheck)
+dev.off()
+# First and last data
+par(mfrow=c(1,2))
+plot(EN[[1]], col=cl)
+plot(EN[[13]], col=cl)
+difen=EN[[1]]-EN[[13]]
+cldif<-colorRampPalette(c("blue","white", "red"))(100)
+plot(difen, col=cldif)
+plotRGB(EN, r=1, g=7, b=13, stretch="lin")
+plotRGB(EN, r=1, g=7, b=13, stretch="hist") # Con hist, anche piccolissime variaz vengono accentuate
+
+
+
 
 
 
