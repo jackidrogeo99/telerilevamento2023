@@ -49,6 +49,8 @@ total=ncell(gcclass)
 total 
 percentages<-frequencies*100/total 
 percentages 
+install.packages("ggplot2") 
+library(ggplot2) 
 
 
 
