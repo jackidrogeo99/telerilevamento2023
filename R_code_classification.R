@@ -14,7 +14,9 @@ singlenr
 kcluster<-kmeans(singlenr, centers=3) # Calcola la distanza tra i px, la min è giusta, ma i calcoli sarebbero n*(n-1)
 #Allora calcola il centroide permettendo una classificazione 
 kcluster
-#3.
+#3. Set values
+gcclass<-setValues(gc[[1]],kcluster$cluster) #Assign new values to a raster object
+
 #I punti con lo stesso colore hanno la stessa riflettanza
 #Il viola indica la zona urbana
 #La classificaz in classi serve per calcolare la freq delle varie classi 
@@ -31,5 +33,24 @@ gcc<-crop(gc, drawExtent()) #Entrerà nell'immagine per disegnare un rettangolo
 ncell(gc) #Restituisce il n di px dell'immagine
 ncell(gcc) 
 singlenr<-getValues(gcc)
-kcluster<-kmeans(singlenr, centers=3) #centers calcola il n di centroidi
+kcluster<-kmeans(singlenr, centers=3) #centers calcola il n di centroidi --> Il n di classi
+kcluster #Associa per ogni val una classe, ovvero una seq di 1,2,3
+#Set values riassocia i val delle classi ai singoli px
+gcclass<-setValues(gcc[[1]],kcluster$cluster) 
+gcclass
+plot(gcclass) 
+#Class 1: volcanic rocks
+#Class 2: sandstones
+#Class 3: conglomerates 
+#Calcolo freq
+frequencies <-freq(gcclass) 
+frequencies 
+total=ncell(gcclass) 
+total 
+percentages<-frequencies*100/total 
+percentages 
+
+
+
+
 
