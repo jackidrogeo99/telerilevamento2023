@@ -1,0 +1,102 @@
+install.packages("patchwork")
+library(patchwork) # For multiframes with ggplot2
+library(raster)
+library(ggplot2) # For ggplot raster
+setwd("C:/Telerilevamento_Geoecologico/Lab/")
+defor1<-brick("defor1_.png")
+defor2<-brick("defor2_.png")
+par(mfrow=c(2,1))
+plotRGB(defor1, 1, 2, 3, stretch="lin")
+plotRGB(defor2, 1, 2, 3, stretch="lin")
+# 1. Get all the single values
+singlenr1<-getValues(defor1)
+singlenr1 # Sono tutti i val di riflettanza per ognuna delle 3 bande
+# 2. Classify
+kcluster1<-kmeans(singlenr1, centers=2) # kmeans permette di calcolare le distanze dalle medie di più classi attraverso il centroide per calcolare la misura della 
+  # distanza di un px incognito da una delle classi. Associa poi il px incognito ad una delle classi in base alla min distanza
+kcluster1
+# Riassociamo le 2 classi ad ogni px precedente usando setValues()
+# 3. Set values to a raster on the basis of defor1
+defor1class<-setValues(defor1[[1]], kcluster1$cluster)
+plot(defor1class)
+# Class 1: forest
+# Class 2: bare soil
+dev.off()
+
+# Classification of the 2006 image
+singlenr2<-getValues(defor2)
+singlenr2
+kcluster2<-kmeans(singlenr2, centers=2)
+kcluster2
+defor2class<-setValues(defor2[[1]], kcluster2$cluster)
+plot(defor2class)
+dev.off()
+
+# Multiframe
+par(mfrow=c(2,1))
+plot(defor1class)
+plot(defor2class)
+
+# Class percentages 1994
+frequencies1<-freq(defor1class)
+frequencies1
+tot1=ncell(defor1class)
+tot1
+percentages1=frequencies1*100/tot1 # Forest: 89.75%, bare soil: 10.25%
+percentages1
+
+# Class percentages 2006
+frequencies2<-freq(defor2class)
+frequencies2
+tot2=ncell(defor2class)
+tot2
+percentages2=frequencies2*100/tot2 # Forest: 52.07%, bare soil: 47.93%
+percentages2
+
+# Adesso facciamo una tab con 3 colonne con titolo cover, 1992, 2006 con la f data.frame()
+# Final table
+cover<-c("Forest", "Bare soil")
+percent1992<-c(89.75, 10.25)
+percent2006<-c(52.07, 47.93)
+percentages<-data.frame(cover, percent1992, percent2006)
+View(percentages)
+
+# ggplot2: apriamo una finestra con ggplot2 con la f ggplot()
+ggplot(percentages, aes(x=cover, y=percent1992, color=cover)) + geom_bar(stat="identity", fill="green") #aes = aesthetics, geom_bar = istogrammi
+ggplot(percentages, aes(x=cover, y=percent2006, color=cover)) + geom_bar(stat="identity", fill="white") 
+
+# Patchwork
+p1<-ggplot(percentages, aes(x=cover, y=percent1992, color=cover)) + geom_bar(stat="identity", fill="green")+ggtitle("Year 1992")+ylim(c(0,100)) #aes = aesthetics, 
+  # geom_bar = istogrammi 
+p2<-ggplot(percentages, aes(x=cover, y=percent2006, color=cover)) + geom_bar(stat="identity", fill="white")+ggtitle("Year 2006")+ylim(c(0,100))
+p1+p2 # Aggiunto anche l'intervallo per NON mentire con le statistiche
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
