@@ -3,6 +3,8 @@ library(ggplot2)
 library(patchwork)
 install.packages("viridis")
 setwd("C:/Telerilevamento_Geoecologico/Lab/")
+
+# Import the Similaun image
 sen<-brick("sentinel.png")
 # band1=NIR
 # band2=red
@@ -15,10 +17,9 @@ plotRGB(sen,1,2,3, stretch="Lin")
 nir<-sen[[1]]
 sd3<-focal(nir, matrix(1/9, 3,3), fun=sd) #sd=st dev, i val di matrix devono 
   # essere dispariper plottare la stdev nel px centrale
-# geom_raster(sd3, mapping=aes(x=x,y=y, fill=layer))
+  
+# Plotting with ggplot
 sd3d<-as.data.frame(sd3, xy=TRUE) # La f as.data.frame() trasforma il dato
-
-# Plotting with ggplot2
 p1<-ggplot()+
   geom_raster(sd3d,mapping=aes(x=x, y=y, fill=layer))+
   scale_fill_viridis() #Il dato per fill lo 
