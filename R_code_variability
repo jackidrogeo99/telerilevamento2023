@@ -1,0 +1,58 @@
+library(raster)
+library(ggplot2)
+library(patchwork)
+install.packages("viridis")
+setwd("C:/Telerilevamento_Geoecologico/Lab/")
+sen<-brick("sentinel.png")
+# band1=NIR
+# band2=red
+# band3=green
+plotRGB(sen,1,2,3, stretch="Lin")
+
+# Calcoliamo la dev std e lo riportiamo sul px centrale della finestra mobile 3x3, 
+  # che poi si muove di 1 px ogni v verso dx e poi sotto
+  # La f è focal(), che è generale
+nir<-sen[[1]]
+sd3<-focal(nir, matrix(1/9, 3,3), fun=sd) #sd=st dev, i val di matrix devono 
+  # essere dispariper plottare la stdev nel px centrale
+# geom_raster(sd3, mapping=aes(x=x,y=y, fill=layer))
+sd3d<-as.data.frame(sd3, xy=TRUE) # La f as.data.frame() trasforma il dato
+
+# Plotting with ggplot2
+p1<-ggplot()+
+  geom_raster(sd3d,mapping=aes(x=x, y=y, fill=layer))+
+  scale_fill_viridis() #Il dato per fill lo 
+  # si trova scrivendo sd3 su terminale
+p1
+# Plotting with ggplot2 and viridis
+p2<-ggplot()+geom_raster(sd3d, mapping=aes(x=x, y=y, fill=layer))+
+  scale_fill_viridis(option="magma")+
+  ggtitle("Standard deviation via the magma colour scale")
+p2
+# inferno
+ggplot()+geom_raster(sd3d, mapping=aes(x=x, y=y, fill=layer))+
+  scale_fill_viridis(option="inferno")+
+  ggtitle("Standard deviation via the inferno colour scale")
+
+p1+p2
+
+# Exercise: plot the original image (nir) and its stdev
+p3<-ggplot()+geom_raster(nir, mapping=aes(x=x, y=y, fill=sentinel_1))+
+  scale_fill_viridis(option="cividis")+
+  ggtitle("NIR via the cividis color scale")
+p3
+p3+p1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
