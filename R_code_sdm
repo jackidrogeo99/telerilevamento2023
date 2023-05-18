@@ -1,0 +1,4 @@
+# R code for spicies distribution
+install.packages("sdm")
+install.packages("sdm")
+library(rgdal)
