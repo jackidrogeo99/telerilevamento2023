@@ -1,4 +1,60 @@
 # R code for spicies distribution
 install.packages("sdm")
 install.packages("sdm")
-library(rgdal)
+library(rgdal) # species
+library(raster)
+file<-system.file("external/species.shp", package="sdm")
+file
+species<-shapefile(file)
+species # Occurrence indica la presenza o meno di una specie e vale 1 se la specie è presente, 
+  # 0 se è assente
+plot(species, pch=19)
+presences<-species[species$Occurrence ==1,] # Prendiamo solo quei punti in cui è presente la 
+  # specie
+presences
+plot(presences, col="blue", pch=19)
+absences<-species[species$Occurrence ==0,]
+absences
+plot(absences, col="red", pch=19)
+
+# plot together 
+plot(presences, col="blue", pch=19)
+points(absences, col="red", pch=19)
+
+# Ora usiamo i predittori,salvati in formato ASCII
+path<-system.file("external", package="sdm")
+
+# List the predictors
+lst<-list.files(path=path, pattern="asc$", full.names=T)
+lst
+
+# Stack
+preds<-stack(lst)
+preds
+cl<-colorRampPalette(c("blue", "orange", "red", "yellow"))(100)
+plot(preds, col=cl)
+
+plot(preds$elevation, col=cl)
+points(presences, pch=19)
+plot(preds$temperature, col=cl)
+points(presences, pch=19)
+
+plot(preds$precipitation, col=cl)
+points(presences, pch=19)
+
+# Creaz del modello: 
+# 1) Spiegaz al sistema quali sono i dati da utilizzare 
+datasdm<-sdmData(train=species, predictors=preds)
+datasdm
+
+# 2) Grafici da creare: n vs T, n vs elevaz secondo un modello lineare
+
+m1<-sdm(Occurrence ~ temperature+elevation+precipitation+vegetation, data=datasdm, 
+        methods="glm")
+p1<-predict(m1, newdata=preds)
+plot(p1, col=cl)
+points(presences, pch=19)
+
+s1<-stack(preds, p1)
+names(s1)<-c("Elevation", "Precipitation", "Temperature", "Vegetation", "R...")
+plot(s1, col=cl) 
