@@ -1,8 +1,9 @@
 # R code for spicies distribution
 install.packages("sdm")
-install.packages("sdm")
+install.packages("rgdal", dependencies=T)
+library(sdm) 
 library(rgdal) # species
-library(raster)
+library(raster) # predictors
 file<-system.file("external/species.shp", package="sdm")
 file
 species<-shapefile(file)
